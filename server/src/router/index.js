@@ -1,9 +1,8 @@
 import { Router } from "express";
+import Restaurant from "./restaurant.router.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  return res.sendStatus(200);
-});
+Restaurant(router);
 
 export default router;

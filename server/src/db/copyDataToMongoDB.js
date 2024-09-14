@@ -1,7 +1,7 @@
 import "dotenv/config";
 import fs from "fs";
 import path from "path";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import csv from "csv-parser";
 import connectToDB from "./index.js";
 
