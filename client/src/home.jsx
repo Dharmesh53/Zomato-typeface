@@ -4,13 +4,25 @@ import { TiLocationArrow } from "react-icons/ti";
 import axios from "axios";
 import { FaHouseUser } from "react-icons/fa";
 import RestaurantCard from "./restaurantCard.jsx";
+import Pagination from "./pagination.jsx";
+import { useSearchParams } from "react-router-dom";
 
 const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") || 1;
+
   const [inputLocation, setInputLocation] = useState("");
-  const [result, setResult] = useState();
+  const [paginate, setPaginate] = useState({
+    minPage: 1,
+    current: Number(page),
+    maxPage: 1,
+    limit: 9,
+  });
+
+  const [result, setResult] = useState([]);
   const [currentLocation, setCurrentLocation] = useState({
-    lat: null,
-    long: null,
+    lat: 0.0,
+    long: 0.0,
   });
 
   const getLocation = () => {
@@ -24,19 +36,22 @@ const Home = () => {
     }
   };
 
-  console.log(currentLocation);
-
   const fetcher = async () => {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/restaurants?offset=1&limit=9"
+      `http://localhost:8080/api/v1/restaurants?offset=${paginate.current}&limit=${paginate.limit}`
     );
     const res = response.data;
-    setResult(res);
+    setResult(res.restaurants);
+    setPaginate((prev) => ({
+      ...prev,
+      maxPage: Math.ceil(res.totalRestaurants / paginate.limit),
+    }));
   };
 
+  // Trigger fetcher when paginate.current changes
   useEffect(() => {
     fetcher();
-  }, []);
+  }, [paginate.current]);
 
   return (
     <div className="h-lvh font-rale font-medium">
@@ -70,7 +85,16 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <div></div>
+      <div>
+        {result && (
+          <Pagination
+            pages={paginate.maxPage}
+            paginate={paginate}
+            setPaginate={setPaginate}
+            setSearchParams={setSearchParams}
+          />
+        )}
+      </div>
     </div>
   );
 };
