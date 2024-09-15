@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const RestaurantCard = ({ item }) => {
   return (
-    <div className="max-w-sm mx-auto my-4 bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="max-w-sm mx-auto relative my-4 w-full h-full bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-4">
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           {item.restaurant_name}
@@ -32,14 +32,13 @@ const RestaurantCard = ({ item }) => {
             Rating: {item.aggregate_rating}
           </div>
         </div>
-        <div>
-          <Link to={`/restaurant/${item.restaurant_id}`}>
-            <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">
-              View Details
-            </button>
-          </Link>
-        </div>
+        <div></div>
       </div>
+      <Link to={`/restaurant/${item.restaurant_id}`}>
+        <button className="bg-black absolute bottom-2 right-2 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">
+          View Details
+        </button>
+      </Link>
     </div>
   );
 };
